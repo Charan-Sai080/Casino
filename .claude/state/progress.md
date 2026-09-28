@@ -15,7 +15,7 @@
 - [x] **Task Manager: Create Task Board for Milestone 1**
 
 ## Remaining Work
-- [ ] Implementer: Execute Task 1 (Core Entities)
+- [x] Implementer: Execute Task 1 (Core Entities)
 - [ ] Implementer: Execute Task 2 (Distributed Sessions)
 - [ ] Implementer: Execute Task 3 (Wallet Ledger)
 - [ ] Implementer: Execute Task 4 (Caching & Idempotency)

@@ -1,23 +1,22 @@
 # Task Board
 
+## ✅ Completed
+
+## 🔴 Changes Requested (Recursive Loop)
+
+### Task 1: Milestone 1.1 - Core Entities & JPA Repositories (REVISION 1)
+- **Status**: Rejected by Reviewer. Implementer must fix.
+- **Reviewer Feedback to Fix**:
+  1. Remove `@Data` from Entities to avoid `equals/hashCode` lazy-loading crashes. Use `@Getter`, `@Setter`, and `@EqualsAndHashCode(onlyExplicitlyIncluded = true)`.
+  2. Add strict `@Column` constraints to `WalletTransaction.amount` (precision=19, scale=4, nullable=false).
+  3. Add `@Column(nullable = false)` to `transactionType` and `account_id`.
+  4. Add `@Column(unique = true)` to `idempotencyKey` to enforce DB-level idempotency protection.
+  5. Add `@CreationTimestamp` and `@Column(updatable = false)` to `createdAt` in all entities.
+  6. *Note*: Disregard the Reviewer's request for an `Account.balance` field. As per the Architect's decision, the balance is a projection stored in Redis, not a hard column on the Account table.
+
 ## 🟢 Ready for Implementation
 
-### Task 1: Milestone 1.1 - Core Entities & JPA Repositories
-- **Goal**: Establish the Postgres database schema using JPA Entities.
-- **Requirements**:
-  - Use `UUID` for primary keys to prevent ID enumeration.
-  - Create `Account.java` (id, createdAt).
-  - Create `WalletTransaction.java` (id, account_id, amount, transaction_type, idempotency_key, createdAt).
-  - Create `AccountRepository.java` and `WalletTransactionRepository.java`.
-  - Use `@Entity`, `@Table`, and standard Lombok annotations for clean code.
-  - Create a basic test to ensure the Spring Application Context loads and connects to the database successfully.
-
----
-
-## ⏳ Blocked (Waiting on Dependencies)
-
 ### Task 2: Milestone 1.2 - Distributed Sessions
-- **Depends On**: Task 1
 - **Goal**: Implement anonymous identity via Spring Session and Redis.
 - **Requirements**: Configure `spring-session-data-redis` and create `SessionController` to return the `HttpOnly` cookie.
 
