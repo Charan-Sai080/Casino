@@ -34,6 +34,10 @@ public class WalletService {
     public BigDecimal processTransaction(UUID accountId, BigDecimal amount, String type, String idempotencyKey) {
         if (amount == null) throw new IllegalArgumentException("Amount cannot be null");
         
+        if (type != null && (type.equalsIgnoreCase("BET") || type.equalsIgnoreCase("WITHDRAWAL"))) {
+            amount = amount.negate();
+        }
+        
         Account account = accountRepository.findByIdForUpdate(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found"));
 
