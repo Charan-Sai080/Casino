@@ -1,7 +1,8 @@
 package com.casino.core.controller;
 
 import com.casino.core.domain.Account;
-import com.casino.core.repository.AccountRepository;
+import com.casino.core.service.SessionService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,17 +16,25 @@ import java.util.Map;
 @RequestMapping("/api/sessions")
 public class SessionController {
 
-    private final AccountRepository accountRepository;
+    private final SessionService sessionService;
 
-    public SessionController(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
+    public SessionController(SessionService sessionService) {
+        this.sessionService = sessionService;
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> createSession(HttpSession session) {
-        Account account = new Account();
-        account = accountRepository.save(account);
+    public ResponseEntity<Map<String, String>> createSession(HttpServletRequest request) {
+        HttpSession existingSession = request.getSession(false);
+        if (existingSession != null && existingSession.getAttribute("account_id") != null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Session already exists");
+            return ResponseEntity.ok(response);
+        }
 
+        Account account = sessionService.createSessionAccount();
+        
+        request.changeSessionId();
+        HttpSession session = request.getSession(true);
         session.setAttribute("account_id", account.getId().toString());
 
         Map<String, String> response = new HashMap<>();
