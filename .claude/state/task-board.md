@@ -16,6 +16,4 @@
 ## 🟢 Ready for Implementation
 
 ### Task 4: Milestone 1.4 - Caching & Idempotency Wrappers
-- **Depends On**: Task 3
-- **Goal**: Optimize read performance and protect against network retries.
-- **Requirements**: Implement `@CacheEvict` and Redis Idempotency filter.
+- **Status**: Completed by Implementer
