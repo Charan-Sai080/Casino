@@ -5,6 +5,8 @@ import com.casino.core.domain.WalletTransaction;
 import com.casino.core.exception.InsufficientFundsException;
 import com.casino.core.repository.AccountRepository;
 import com.casino.core.repository.WalletTransactionRepository;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +24,20 @@ public class WalletService {
         this.walletTransactionRepository = walletTransactionRepository;
     }
 
+    @Cacheable(value = "balances", key = "#accountId")
+    public BigDecimal getBalance(UUID accountId) {
+        return walletTransactionRepository.getBalanceForAccount(accountId);
+    }
+
     @Transactional
+    @CacheEvict(value = "balances", key = "#accountId")
     public BigDecimal processTransaction(UUID accountId, BigDecimal amount, String type, String idempotencyKey) {
         if (amount == null) throw new IllegalArgumentException("Amount cannot be null");
         
         Account account = accountRepository.findByIdForUpdate(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found"));
 
-        BigDecimal currentBalance = walletTransactionRepository.getBalanceForAccount(accountId);
+        BigDecimal currentBalance = getBalance(accountId);
         if (amount.compareTo(BigDecimal.ZERO) < 0 && currentBalance.add(amount).compareTo(BigDecimal.ZERO) < 0) {
             throw new InsufficientFundsException("Insufficient funds");
         }
