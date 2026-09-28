@@ -17,5 +17,5 @@
 ## Remaining Work
 - [x] Implementer: Execute Task 1 (Core Entities)
 - [x] Implementer: Execute Task 2 (Distributed Sessions)
-- [ ] Implementer: Execute Task 3 (Wallet Ledger - In Progress)
+- [x] Implementer: Execute Task 3 (Wallet Ledger)
 - [ ] Implementer: Execute Task 4 (Caching & Idempotency)
