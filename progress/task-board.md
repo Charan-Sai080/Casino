@@ -14,9 +14,11 @@
 ### Task 4: Milestone 1.4 - Caching & Idempotency Wrappers (REVISION 1)
 - **Status**: Fixes implemented and verified.
 
-## ✅ Completed
-
-### Task 5: Milestone 1 Codebase Hardening
+### Task 5: Milestone 1 Codebase Hardening (REVISION 1)
 - **Status**: Fixes implemented and verified.
 
 ---
+
+## 🟢 Ready for Implementation
+
+(No tasks currently pending)
