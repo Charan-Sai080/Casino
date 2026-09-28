@@ -34,7 +34,7 @@ public class WalletController {
 
     @PostMapping("/transactions")
     public ResponseEntity<BigDecimal> processTransaction(
-            @RequestBody TransactionRequest request, 
+            @jakarta.validation.Valid @RequestBody TransactionRequest request, 
             @RequestHeader(value = "Idempotency-Key", required = false) String headerIdempotencyKey,
             @SessionAttribute(name = "account_id", required = false) String accountIdStr) {
         
@@ -46,16 +46,20 @@ public class WalletController {
 
         if (idempotencyKey != null) {
             try {
-                String cached = redisTemplate.opsForValue().get("idempotency:" + idempotencyKey);
-                if (cached != null) {
-                    try {
-                        return ResponseEntity.ok(new BigDecimal(cached));
-                    } catch (NumberFormatException e) {
-                        logger.warn("Invalid cached value for idempotency key: {}", idempotencyKey, e);
+                Boolean isNew = redisTemplate.opsForValue().setIfAbsent("lock:" + idempotencyKey, "PENDING", java.time.Duration.ofMinutes(1));
+                if (Boolean.FALSE.equals(isNew)) {
+                    String cached = redisTemplate.opsForValue().get("idempotency:" + idempotencyKey);
+                    if (cached != null) {
+                        try {
+                            return ResponseEntity.ok(new BigDecimal(cached));
+                        } catch (NumberFormatException e) {
+                            logger.warn("Invalid cached value for idempotency key: {}", idempotencyKey, e);
+                        }
                     }
+                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
                 }
             } catch (Exception e) {
-                logger.warn("Redis get failed for idempotency key: {}", idempotencyKey, e);
+                logger.warn("Redis operations failed for idempotency key: {}", idempotencyKey, e);
             }
         }
         

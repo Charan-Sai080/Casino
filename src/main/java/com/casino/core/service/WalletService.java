@@ -37,7 +37,7 @@ public class WalletService {
         Account account = accountRepository.findByIdForUpdate(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found"));
 
-        BigDecimal currentBalance = getBalance(accountId);
+        BigDecimal currentBalance = walletTransactionRepository.getBalanceForAccount(accountId);
         if (amount.compareTo(BigDecimal.ZERO) < 0 && currentBalance.add(amount).compareTo(BigDecimal.ZERO) < 0) {
             throw new InsufficientFundsException("Insufficient funds");
         }

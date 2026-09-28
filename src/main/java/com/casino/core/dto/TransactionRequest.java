@@ -2,7 +2,12 @@ package com.casino.core.dto;
 
 import java.math.BigDecimal;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public class TransactionRequest {
+    @NotNull
+    @Positive
     private BigDecimal amount;
     private String type;
     private String idempotencyKey;
