@@ -2,15 +2,11 @@
 
 ## ✅ Completed
 
-## 🔴 Changes Requested (Recursive Loop)
-
-## ✅ Completed
-
 ### Task 1: Milestone 1.1 - Core Entities & JPA Repositories (REVISION 1)
 - **Status**: Fixes implemented and verified.
 
-### Task 2: Milestone 1.2 - Distributed Sessions
-- **Status**: Completed by Implementer
+### Task 2: Milestone 1.2 - Distributed Sessions (REVISION 1)
+- **Status**: Fixes implemented and verified.
 
 ---
 
