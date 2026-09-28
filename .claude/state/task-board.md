@@ -9,11 +9,12 @@
 ### Task 1: Milestone 1.1 - Core Entities & JPA Repositories (REVISION 1)
 - **Status**: Fixes implemented and verified.
 
+### Task 2: Milestone 1.2 - Distributed Sessions
+- **Status**: Completed by Implementer
+
 ---
 
-### Task 2: Milestone 1.2 - Distributed Sessions
-- **Goal**: Implement anonymous identity via Spring Session and Redis.
-- **Requirements**: Configure `spring-session-data-redis` and create `SessionController` to return the `HttpOnly` cookie.
+## 🟢 Ready for Implementation
 
 ### Task 3: Milestone 1.3 - Wallet Ledger & Pessimistic Locking
 - **Depends On**: Task 2
