@@ -11,9 +11,11 @@
 ### Task 3: Milestone 1.3 - Wallet Ledger & Pessimistic Locking (REVISION 1)
 - **Status**: Fixes implemented and verified.
 
+### Task 4: Milestone 1.4 - Caching & Idempotency Wrappers (REVISION 1)
+- **Status**: Fixes implemented and verified.
+
 ---
 
 ## 🟢 Ready for Implementation
 
-### Task 4: Milestone 1.4 - Caching & Idempotency Wrappers
-- **Status**: Completed by Implementer
+(No tasks currently pending)
