@@ -11,6 +11,6 @@ import java.util.UUID;
 
 @Repository
 public interface WalletTransactionRepository extends JpaRepository<WalletTransaction, UUID> {
-    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM WalletTransaction t WHERE t.account.id = :accountId")
+    @Query("SELECT COALESCE(SUM(t.amount), 0.0) FROM WalletTransaction t WHERE t.account.id = :accountId")
     BigDecimal getBalanceForAccount(@Param("accountId") UUID accountId);
 }

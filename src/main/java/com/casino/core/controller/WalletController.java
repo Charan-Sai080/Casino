@@ -2,7 +2,7 @@ package com.casino.core.controller;
 
 import com.casino.core.dto.TransactionRequest;
 import com.casino.core.service.WalletService;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,11 +24,15 @@ public class WalletController {
     }
 
     @PostMapping("/transactions")
-    public ResponseEntity<BigDecimal> processTransaction(@RequestBody TransactionRequest request, HttpSession session) {
-        UUID accountId = (UUID) session.getAttribute("account_id");
-        if (accountId == null) {
+    public ResponseEntity<BigDecimal> processTransaction(
+            @RequestBody TransactionRequest request, 
+            @SessionAttribute(name = "account_id", required = false) String accountIdStr) {
+        
+        if (accountIdStr == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        
+        UUID accountId = UUID.fromString(accountIdStr);
 
         BigDecimal newBalance = walletService.processTransaction(
                 accountId,
