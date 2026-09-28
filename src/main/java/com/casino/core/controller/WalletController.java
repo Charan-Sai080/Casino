@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -21,6 +23,7 @@ import java.util.UUID;
 @RequestMapping("/api/wallet")
 public class WalletController {
 
+    private static final Logger logger = LoggerFactory.getLogger(WalletController.class);
     private final WalletService walletService;
     private final StringRedisTemplate redisTemplate;
 
@@ -42,9 +45,17 @@ public class WalletController {
         String idempotencyKey = headerIdempotencyKey != null ? headerIdempotencyKey : request.getIdempotencyKey();
 
         if (idempotencyKey != null) {
-            String cached = redisTemplate.opsForValue().get("idempotency:" + idempotencyKey);
-            if (cached != null) {
-                return ResponseEntity.ok(new BigDecimal(cached));
+            try {
+                String cached = redisTemplate.opsForValue().get("idempotency:" + idempotencyKey);
+                if (cached != null) {
+                    try {
+                        return ResponseEntity.ok(new BigDecimal(cached));
+                    } catch (NumberFormatException e) {
+                        logger.warn("Invalid cached value for idempotency key: {}", idempotencyKey, e);
+                    }
+                }
+            } catch (Exception e) {
+                logger.warn("Redis get failed for idempotency key: {}", idempotencyKey, e);
             }
         }
         
@@ -58,7 +69,11 @@ public class WalletController {
         );
 
         if (idempotencyKey != null) {
-            redisTemplate.opsForValue().set("idempotency:" + idempotencyKey, newBalance.toString(), 24, TimeUnit.HOURS);
+            try {
+                redisTemplate.opsForValue().set("idempotency:" + idempotencyKey, newBalance.toString(), 24, TimeUnit.HOURS);
+            } catch (Exception e) {
+                logger.warn("Redis set failed for idempotency key: {}", idempotencyKey, e);
+            }
         }
 
         return ResponseEntity.ok(newBalance);
