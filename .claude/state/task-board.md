@@ -5,10 +5,13 @@
 ### Task 1: Milestone 1.1 - Core Entities & JPA Repositories (REVISION 1)
 - **Status**: Fixes implemented and verified.
 
-### Task 2: Milestone 1.2 - Distributed Sessions (REVISION 1)
-- **Status**: Fixes implemented and verified.
+## 🔴 Changes Requested (Recursive Loop)
 
----
+### Task 2: Milestone 1.2 - Distributed Sessions (REVISION 2)
+- **Status**: Rejected by Reviewer. Implementer must fix.
+- **Reviewer Feedback to Fix**:
+  1. Fix the `IllegalStateException` in `SessionController`. Do not call `request.changeSessionId()` unconditionally if the session doesn't exist yet. Create the session first with `request.getSession(true)` and then change the ID, or wrap it in a conditional check.
+  2. Fix `pom.xml`: Remove the 6 duplicated `spring-boot-starter-test` dependencies.
 
 ## 🟢 Ready for Implementation
 

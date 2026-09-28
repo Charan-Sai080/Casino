@@ -24,17 +24,17 @@ public class SessionController {
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createSession(HttpServletRequest request) {
-        HttpSession existingSession = request.getSession(false);
-        if (existingSession != null && existingSession.getAttribute("account_id") != null) {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Session already exists");
-            return ResponseEntity.ok(response);
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("account_id") != null) {
+            return ResponseEntity.ok(Map.of("message", "Session already exists"));
         }
 
         Account account = sessionService.createSessionAccount();
         
-        request.changeSessionId();
-        HttpSession session = request.getSession(true);
+        if (session != null) {
+            request.changeSessionId();
+        }
+        session = request.getSession(true);
         session.setAttribute("account_id", account.getId().toString());
 
         Map<String, String> response = new HashMap<>();
